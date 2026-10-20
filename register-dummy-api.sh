@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 # Register a dummy test API (API + version + OpenAPI spec) in API hub.
+# Inputs (env var, or prompted if not set): PROJECT_ID, REGION (same values used for setup-apihub.sh)
 set -euo pipefail
 
-PROJECT_ID="${PROJECT_ID:-YOUR_PROJECT_ID}"
-REGION="${REGION:-asia-east1}"
+for var in PROJECT_ID REGION; do
+  if [[ -z "${!var:-}" ]]; then
+    [[ -t 0 ]] || { echo "ERROR: ${var} is not set" >&2; exit 1; }
+    read -r -p "${var} (same as used for setup-apihub.sh): " "${var?}"
+  fi
+  [[ -n "${!var:-}" ]] || { echo "ERROR: ${var} must not be empty" >&2; exit 1; }
+done
+
 API_ID="taiwan-weather-api"
 VERSION_ID="v1-0-0"  # must be 4-500 chars
 SPEC_ID="openapi-v1"
