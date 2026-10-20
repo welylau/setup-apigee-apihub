@@ -1,0 +1,95 @@
+openapi: 3.0.3
+info:
+  title: Taiwan Weather API (Dummy)
+  description: Testing dummy API returning weather for cities in Taiwan. Demo only.
+  version: 1.0.0
+  contact:
+    name: API Hub Demo Admin
+    email: api-owner@example.com
+servers:
+  - url: https://api.example.com/weather/v1
+paths:
+  /cities:
+    get:
+      operationId: listCities
+      summary: List supported cities
+      responses:
+        "200":
+          description: List of cities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/City"
+  /cities/{cityId}/current:
+    get:
+      operationId: getCurrentWeather
+      summary: Get current weather for a city
+      parameters:
+        - name: cityId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: taipei
+      responses:
+        "200":
+          description: Current weather
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Weather"
+        "404":
+          description: City not found
+  /cities/{cityId}/forecast:
+    get:
+      operationId: getForecast
+      summary: Get multi-day forecast for a city
+      parameters:
+        - name: cityId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: days
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 7
+            default: 3
+      responses:
+        "200":
+          description: Forecast
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Weather"
+components:
+  schemas:
+    City:
+      type: object
+      properties:
+        id:
+          type: string
+          example: taipei
+        name:
+          type: string
+          example: Taipei
+    Weather:
+      type: object
+      properties:
+        cityId:
+          type: string
+        date:
+          type: string
+          format: date
+        temperatureC:
+          type: number
+          example: 27.5
+        condition:
+          type: string
+          example: Cloudy

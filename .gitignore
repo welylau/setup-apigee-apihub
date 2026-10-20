@@ -1,0 +1,9 @@
+# Local-only sanitize/restore tooling and backups
+sanitize.sh
+restore.sh
+.secrets_backup.env
+
+# Misc
+.DS_Store
+*.log
+.env
